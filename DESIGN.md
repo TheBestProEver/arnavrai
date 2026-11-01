@@ -1,4 +1,4 @@
-# arnavrai.in design system (v8)
+# arnavrai.in design system (v10)
 
 A tour of a physics lab: dark 3D stages for the big moments, lighter reading sections between them, a warp starfield behind everything, and an icon on nearly every item.
 
@@ -63,3 +63,19 @@ An inline SVG sprite at the top of `<body>` (`#i-rocket`, `#i-atom`, `#i-sat`, â
 - Terminal: typing happens inline at a `guest@arnavrai:~$` prompt with a blinking caret; clicking anywhere in the window focuses it. The rocket pane initialises after the window opens so the UI never waits on it.
 - Cursor: dot and ring are positioned directly from the pointer, with no smoothing.
 - UCSP logo: embedded inline (base64) above the Space program heading, so it needs no extra file.
+
+## v9: performance and polish
+
+- Native scrolling again (the wheel-hijack glide was the main cause of stalls on slower laptops). Anchor links use CSS smooth scrolling and land below the fixed bar.
+- Removed every `backdrop-filter`, the `mix-blend-mode` cursor and the blur transitions; these forced full-page recompositing on each frame.
+- 3D: pixel ratio capped at 1.25, scenes render only while actually on screen, the hero keeps at most 6 live collisions, and calorimeter towers update only while lit. Background starfield reduced to 700 stars. Live 2D canvases run at 20 fps.
+- Heading reveal bug: a `clip-path` on the heading made Chrome's IntersectionObserver report zero intersection, so the reveal never fired. The clip now lives on an inner `.h2-in` span and the heading itself is observed.
+- Section labels no longer carry numbers (they had fallen out of order); each is a short descriptive label with an icon.
+- Phones: pinned-section text is smaller and capped in height, role dates hide, headings shrink so long words fit.
+- "Say hi" and "Get in touch" scroll to the contact section instead of opening a mail client.
+
+## v10
+
+- Schoolhouse stats are plain tiles: number, label, and a "Top 5%" pill pinned to the same baseline in every tile. The ring gauges are gone.
+- One corner radius (`--r: 20px`) for every panel, tile, card, quote and featured image.
+- Terminal category names match the page ("Social impact", "Tools and media").
