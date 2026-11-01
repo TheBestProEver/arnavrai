@@ -27,7 +27,7 @@
     --display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
     --text: "Newsreader", Georgia, "Times New Roman", serif;
     --s1: 8px; --s2: 16px; --s3: 24px; --s4: 32px; --s5: 48px; --s6: 64px; --s7: 96px; --s8: 128px;
-    --gutter: clamp(20px, 4vw, 56px); --max: 1320px; --ease: cubic-bezier(.2, .7, .1, 1);
+    --gutter: clamp(20px, 4vw, 56px); --max: 1320px; --ease: cubic-bezier(.2, .7, .1, 1); --r: 20px;
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) {
@@ -38,7 +38,7 @@
     }
   }
   *, *::before, *::after { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; overflow-x: clip; }
+  html { -webkit-text-size-adjust: 100%; overflow-x: clip; scroll-behavior: smooth; }
   body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--text); font-size: clamp(17px, .3vw + 16px, 19px); line-height: 1.55; font-optical-sizing: auto; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; overflow-x: clip; }
   h1, h2, h3, p, ul, ol, figure { margin: 0; }
   ul, ol { padding: 0; list-style: none; }
@@ -74,22 +74,22 @@
   html:not(.js) .boot { display: none; }
 
   /* ---------- cursor: a reticle ---------- */
-  .cur { position: fixed; left: 0; top: 0; z-index: 95; pointer-events: none; mix-blend-mode: difference; display: none; }
+  .cur { position: fixed; left: 0; top: 0; z-index: 95; pointer-events: none; display: none; }
   .has-cursor .cur { display: block; }
-  .cur-dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: #fff; }
+  .cur-dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 1.5px rgba(10,14,28,.55); }
   .cur { will-change: transform; }
-  .cur-ring { width: 36px; height: 36px; margin: -18px 0 0 -18px; border-radius: 50%; border: 1px solid #fff; transition: width .18s var(--ease), height .18s var(--ease), margin .18s var(--ease); }
+  .cur-ring { width: 36px; height: 36px; margin: -18px 0 0 -18px; border-radius: 50%; border: 1.5px solid #fff; box-shadow: 0 0 0 1px rgba(10,14,28,.5), inset 0 0 0 1px rgba(10,14,28,.35); transition: width .18s var(--ease), height .18s var(--ease), margin .18s var(--ease); }
   .cur-ring::before, .cur-ring::after { content: ""; position: absolute; background: #fff; opacity: 0; transition: opacity .25s; }
   .cur-ring::before { left: 50%; top: -9px; bottom: -9px; width: 1px; }
   .cur-ring::after { top: 50%; left: -9px; right: -9px; height: 1px; }
-  .cur-ring span { position: absolute; left: 50%; top: calc(100% + 12px); transform: translateX(-50%); white-space: nowrap; font-family: var(--display); font-weight: 700; font-size: 14px; letter-spacing: .06em; color: #fff; opacity: 0; transition: opacity .2s; }
+  .cur-ring span { position: absolute; left: 50%; top: calc(100% + 12px); transform: translateX(-50%); white-space: nowrap; font-family: var(--display); font-weight: 700; font-size: 14px; letter-spacing: .06em; color: #fff; text-shadow: 0 1px 2px rgba(10,14,28,.8); opacity: 0; transition: opacity .2s; }
   .cur-ring.big { width: 58px; height: 58px; margin: -29px 0 0 -29px; }
   .cur-ring.big::before, .cur-ring.big::after, .cur-ring.big span { opacity: 1; }
   .has-cursor, .has-cursor a, .has-cursor button { cursor: none; }
 
   /* ---------- top bar ---------- */
   .progress { position: fixed; left: 0; top: 0; height: 2px; width: 100%; z-index: 80; background: linear-gradient(90deg, var(--cyan), var(--blue)); transform-origin: left; transform: scaleX(var(--sp, 0)); }
-  .bar { position: fixed; inset: 0 0 auto 0; z-index: 70; color: var(--stage-ink); background: color-mix(in srgb, var(--stage) 72%, transparent); backdrop-filter: blur(14px) saturate(1.3); -webkit-backdrop-filter: blur(14px) saturate(1.3); border-bottom: 1px solid var(--stage-rule); }
+  .bar { position: fixed; inset: 0 0 auto 0; z-index: 70; color: var(--stage-ink); background: color-mix(in srgb, var(--stage) 94%, transparent); border-bottom: 1px solid var(--stage-rule); }
   .bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); height: 64px; }
   .logo { font-family: var(--display); font-weight: 800; font-size: 26px; letter-spacing: -.01em; background: none; border: 0; padding: 8px 0; cursor: pointer; }
   .logo i { font-style: normal; color: var(--blue); }
@@ -141,11 +141,11 @@
   .hud { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
   .hud p { font-family: var(--display); font-weight: 600; font-size: 16px; letter-spacing: .03em; color: var(--stage-dim); font-variant-numeric: tabular-nums; display: flex; gap: 16px; }
   .hud b { color: var(--stage-ink); }
-  .fire { display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 var(--text); color: var(--stage-ink); background: color-mix(in srgb, var(--stage) 55%, transparent); border: 1px solid var(--stage-ink); border-radius: 999px; min-height: 46px; padding: 0 22px; cursor: pointer; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .fire { display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 var(--text); color: var(--stage-ink); background: color-mix(in srgb, var(--stage) 55%, transparent); border: 1px solid var(--stage-ink); border-radius: 999px; min-height: 46px; padding: 0 22px; cursor: pointer; }
   .fire:hover { background: var(--cyan); border-color: var(--cyan); color: var(--stage); }
   .hero .stage-caption { margin-top: var(--s3); }
   .tiles { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-  .tile { position: absolute; width: 52px; height: 52px; border-radius: 15px; display: grid; place-items: center; color: var(--c, var(--cyan)); background: color-mix(in srgb, var(--stage-2) 60%, transparent); border: 1px solid var(--stage-rule); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 18px 40px -20px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.06); animation: bob 8s ease-in-out infinite; animation-delay: var(--dl, 0s); translate: var(--px, 0) var(--py, 0); transition: translate .6s var(--ease); }
+  .tile { position: absolute; width: 52px; height: 52px; border-radius: 15px; display: grid; place-items: center; color: var(--c, var(--cyan)); background: color-mix(in srgb, var(--stage-2) 60%, transparent); border: 1px solid var(--stage-rule); box-shadow: 0 18px 40px -20px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.06); animation: bob 8s ease-in-out infinite; animation-delay: var(--dl, 0s); translate: var(--px, 0) var(--py, 0); transition: translate .6s var(--ease); }
   .tile .ic { width: 24px; height: 24px; stroke-width: 1.7; }
   @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
   @media (max-width: 959px) {
@@ -173,8 +173,8 @@
   .pin-ui a, .pin-ui button { pointer-events: auto; }
   .steps { display: grid; align-self: center; max-width: 32rem; }
   .steps > .step { grid-area: 1 / 1; }
-  .js .steps > .step { opacity: 0; transform: translateY(20px); filter: blur(6px); transition: opacity .45s ease, transform .6s var(--ease), filter .45s ease; pointer-events: none; }
-  .js .steps > .step.on { opacity: 1; transform: none; filter: none; pointer-events: auto; }
+  .js .steps > .step { opacity: 0; transform: translateY(16px); transition: opacity .4s ease, transform .5s var(--ease); pointer-events: none; }
+  .js .steps > .step.on { opacity: 1; transform: none; pointer-events: auto; }
   .step .h2 + * { margin-top: var(--s4); }
   .step > * + * { margin-top: var(--s3); }
   .num { display: inline-flex; align-items: center; gap: 8px; font-family: var(--display); font-weight: 700; font-size: 18px; letter-spacing: .04em; color: var(--cyan); }
@@ -227,9 +227,10 @@
   .sec-num { display: inline-flex; align-items: center; gap: 8px; font-family: var(--display); font-weight: 700; font-size: 18px; letter-spacing: .04em; color: var(--accent); margin-bottom: var(--s2); }
   .stage .sec-num { color: var(--cyan); }
   .js [data-reveal] { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .75s var(--ease); transition-delay: var(--d, 0ms); }
-  .js .h2[data-reveal] { opacity: 1; transform: none; clip-path: inset(0 0 100% 0); transition: clip-path .85s var(--ease); }
+  .js .h2[data-reveal] { opacity: 1; transform: none; }
+  .js .h2[data-reveal] > .h2-in { display: inline-block; clip-path: inset(0 0 100% 0); transition: clip-path .85s var(--ease); }
   .js [data-reveal].in { opacity: 1; transform: none; }
-  .js .h2[data-reveal].in { clip-path: inset(-10% -5% -14% -5%); }
+  .js .h2[data-reveal].in > .h2-in { clip-path: inset(-10% -5% -14% -5%); }
 
   /* ---------- podcast stage ---------- */
   .pod { min-height: 100vh; min-height: 100svh; display: grid; align-items: center; overflow: hidden; isolation: isolate; }
@@ -267,14 +268,14 @@
   .chip i { width: 9px; height: 9px; border-radius: 50%; background: var(--c, var(--graphite)); }
   .chips .count { margin-left: auto; color: var(--graphite); font-variant-numeric: tabular-nums; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr)); gap: 18px; }
-  .card { position: relative; display: flex; flex-direction: column; border-radius: 18px; background: var(--card); border: 1px solid var(--rule); overflow: hidden; will-change: transform; transition: box-shadow .4s, border-color .4s; }
+  .card { position: relative; display: flex; flex-direction: column; border-radius: var(--r); background: var(--card); border: 1px solid var(--rule); overflow: hidden; will-change: transform; transition: box-shadow .4s, border-color .4s; }
   .card[hidden] { display: none; }
   .card { transition: box-shadow .5s var(--ease), border-color .5s, transform .6s var(--ease); }
   .card:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--rule)); box-shadow: 0 22px 50px -30px color-mix(in srgb, var(--accent) 50%, transparent); }
   .card::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .3s; background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 50%), rgba(255,255,255,.22), transparent 45%); mix-blend-mode: soft-light; }
   .card:hover::after { opacity: 1; }
   .card .art { display: block; width: 100%; aspect-ratio: 16 / 9; background: var(--stage); }
-  .badge { position: absolute; left: 14px; top: 14px; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--stage) 55%, transparent); border: 1px solid var(--stage-rule); color: var(--c, var(--cyan)); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  .badge { position: absolute; left: 14px; top: 14px; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--stage) 55%, transparent); border: 1px solid var(--stage-rule); color: var(--c, var(--cyan)); }
   .badge .ic { width: 24px; height: 24px; }
   .card .body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
   .card .meta { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--graphite); }
@@ -302,7 +303,7 @@
   .tl .what { margin-top: 8px; color: var(--graphite); max-width: 60ch; }
   .edu { display: grid; gap: 18px; margin-top: var(--s5); }
   @media (min-width: 760px) { .edu { grid-template-columns: 1fr 1fr; } }
-  .panel { border: 1px solid var(--rule); border-radius: 18px; background: var(--card); padding: 22px 24px; position: relative; }
+  .panel { border: 1px solid var(--rule); border-radius: var(--r); background: var(--card); padding: 22px 24px; position: relative; }
   .panel .when { font-family: var(--display); font-weight: 700; color: var(--accent); letter-spacing: .03em; }
   .panel h3 { margin: 8px 0 6px; }
   .panel p { color: var(--graphite); }
@@ -338,7 +339,7 @@
   .fact { position: relative; height: 240px; border: 0; padding: 0; background: none; perspective: 1100px; cursor: pointer; text-align: left; }
   .fact .in { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform .8s var(--ease); }
   .fact[aria-pressed="true"] .in { transform: rotateY(180deg); }
-  .fact .face { position: absolute; inset: 0; border-radius: 18px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+  .fact .face { position: absolute; inset: 0; border-radius: var(--r); padding: 22px; display: flex; flex-direction: column; justify-content: space-between; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
   .fact .front { background: var(--stage); color: var(--stage-ink); border: 1px solid var(--stage-rule); overflow: hidden; }
   .fact .front .ic { width: 34px; height: 34px; color: var(--c, var(--cyan)); }
   .fact .front b { font-family: var(--display); font-weight: 800; font-size: clamp(40px, 3.8vw, 58px); line-height: .95; overflow-wrap: anywhere; }
@@ -413,7 +414,7 @@
   .feats { display: grid; gap: clamp(56px, 7vw, 110px); margin-bottom: clamp(72px, 8vw, 120px); }
   .feat { display: grid; gap: var(--s5); align-items: center; }
   @media (min-width: 960px) { .feat { grid-template-columns: 7fr 5fr; gap: var(--s6); } .feat:nth-child(even) .feat-art { order: 2; } }
-  .feat-art { position: relative; border-radius: 22px; overflow: hidden; border: 1px solid var(--rule); background: var(--stage); aspect-ratio: 16 / 10; box-shadow: 0 40px 80px -50px rgba(6,10,22,.6); transition: transform .12s ease-out; will-change: transform; }
+  .feat-art { position: relative; border-radius: var(--r); overflow: hidden; border: 1px solid var(--rule); background: var(--stage); aspect-ratio: 16 / 10; box-shadow: 0 40px 80px -50px rgba(6,10,22,.6); transition: transform .12s ease-out; will-change: transform; }
   .feat-art canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
   .feat-art .badge { left: 18px; top: 18px; }
   .feat .meta { display: flex; gap: 16px; font-size: 15px; color: var(--graphite); }
@@ -452,7 +453,7 @@
 
   /* ---------- research and leadership: bento ---------- */
   .bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; }
-  .tb { position: relative; grid-column: span 12; min-height: 320px; border-radius: 22px; overflow: hidden; background: var(--stage); color: var(--stage-ink); border: 1px solid var(--stage-rule); display: flex; flex-direction: column; justify-content: flex-end; isolation: isolate; transition: transform .18s var(--ease), border-color .15s; }
+  .tb { position: relative; grid-column: span 12; min-height: 320px; border-radius: var(--r); overflow: hidden; background: var(--stage); color: var(--stage-ink); border: 1px solid var(--stage-rule); display: flex; flex-direction: column; justify-content: flex-end; isolation: isolate; transition: transform .18s var(--ease), border-color .15s; }
   .tb:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--cyan) 50%, transparent); }
   .tb canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; display: block; }
   .tb::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(to top, var(--stage) 10%, color-mix(in srgb, var(--stage) 72%, transparent) 44%, transparent 76%); }
@@ -468,7 +469,7 @@
   /* ---------- Schoolhouse ---------- */
   .sh-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
   @media (max-width: 860px) { .sh-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  .gauge { border: 1px solid var(--rule); border-radius: 22px; background: var(--card); padding: 22px; display: grid; justify-items: start; gap: 6px; }
+  .gauge { border: 1px solid var(--rule); border-radius: var(--r); background: var(--card); padding: 22px; display: grid; justify-items: start; gap: 6px; }
   .gauge svg { width: 92px; height: 92px; transform: rotate(-90deg); margin-bottom: 8px; }
   .gauge circle { fill: none; stroke-width: 3.2; }
   .gauge .g-bg { stroke: var(--rule); }
@@ -496,7 +497,7 @@
   .qtrack.rev { animation-direction: reverse; animation-duration: 85s; }
   .quotes:hover .qtrack { animation-play-state: paused; }
   @keyframes qscroll { to { transform: translateX(-50%); } }
-  .q { margin: 0; width: 340px; flex: none; border: 1px solid var(--rule); border-radius: 18px; background: var(--card); padding: 18px 20px; font-size: 17px; line-height: 1.45; }
+  .q { margin: 0; width: 340px; flex: none; border: 1px solid var(--rule); border-radius: var(--r); background: var(--card); padding: 18px 20px; font-size: 17px; line-height: 1.45; }
   .q::before { content: "“"; display: block; font-family: var(--display); font-weight: 800; font-size: 46px; line-height: .6; color: var(--gold); margin-bottom: 8px; }
   @media (prefers-reduced-motion: reduce) { .qtrack { animation: none; flex-wrap: wrap; width: auto; } .qtrack .q[aria-hidden] { display: none; } .gauge .g-fg, .bar-row .tr i, .cert .tr i { transition: none; } }
 
@@ -551,6 +552,39 @@
   @media (max-width: 640px) { .sh-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .gauge b { font-size: clamp(38px, 3vw, 54px); }
   section[id], footer { scroll-margin-top: 72px; }
+
+  /* ---------- v9: buttons, creed, mobile pinned text ---------- */
+  .btn, .ghost, .fire, .hold, .chip, .term-btn { white-space: nowrap; line-height: 1; }
+  .btn .ic, .ghost .ic, .fire .ic, .hold .ic, .term-btn .ic { width: 18px; height: 18px; vertical-align: 0; }
+  .creed { display: grid; gap: 6px; }
+  .creed span { display: block; }
+  .creed .creed-end { margin-top: 10px; font-style: normal; font-family: var(--display); font-weight: 800; font-size: 1.5em; color: var(--accent); }
+  @media (max-width: 900px) {
+    .pin-ui { padding-top: 80px; }
+    .step .h2 { font-size: clamp(46px, 13vw, 72px); }
+    .beacon-title { font-size: clamp(60px, 17vw, 104px); }
+    .step .h2-sm { font-size: clamp(36px, 9.5vw, 54px); }
+    .step .lede { font-size: 18px; line-height: 1.35; }
+    .step > * + * { margin-top: 14px; }
+    .step .muted, .step .legend { font-size: 15px; }
+    .roles li span:last-child { display: none; }
+    .roles li { padding: 5px 0; font-size: 15px; }
+    .pin-foot .stage-caption { display: none; }
+    .steps { max-height: calc(100svh - 190px); overflow: hidden; }
+  }
+  @media (max-width: 900px) and (max-height: 720px) {
+    .step .muted, .step .legend, .feel li span b + br { display: none; }
+    .step .h2 { font-size: clamp(40px, 11vw, 60px); }
+  }
+  @media (max-width: 640px) { .hero-foot { gap: 18px 12px; } .stat b { font-size: 34px; } .hud p { font-size: 14px; gap: 10px; } }
+  @media (max-width: 640px) { .h2 { font-size: clamp(42px, 11vw, 60px); } .h2-sm { font-size: clamp(36px, 9.5vw, 48px); } .pod .h2, .beacon-title { font-size: clamp(56px, 17vw, 96px); } .contact .big { font-size: clamp(50px, 14vw, 72px); } }
+
+  /* ---------- Schoolhouse stat tiles ---------- */
+  .stat2 { display: flex; flex-direction: column; gap: 8px; min-height: 190px; }
+  .stat2 b { font-family: var(--display); font-weight: 800; font-size: clamp(44px, 4vw, 64px); line-height: .9; font-variant-numeric: tabular-nums; color: var(--c, var(--ink)); }
+  .stat2 span { color: var(--graphite); line-height: 1.3; }
+  .stat2 .pill { margin-top: auto; align-self: flex-start; font-style: normal; }
+  @media (prefers-color-scheme: light) { .stat2 b { color: var(--ink); } .stat2 .pill i { background: var(--c); } }
 </style>
 </head>
 <body>
@@ -645,7 +679,7 @@
     </nav>
     <div class="bar-actions">
       <button class="term-btn" id="term-btn" type="button" aria-controls="term"><svg class="ic"><use href="#i-term"/></svg>Terminal</button>
-      <a class="btn hi" href="mailto:arnavrai@uchicago.edu" data-magnet>Say hi</a>
+      <a class="btn hi" href="#contact" data-magnet>Say hi</a>
     </div>
   </div>
 </div>
@@ -780,7 +814,7 @@
   <section class="block" id="experience" data-field aria-labelledby="exp-h">
     <div class="wrap">
       <div class="sec-head">
-        <div><p class="sec-num"><svg class="ic"><use href="#i-bag"/></svg>02, the timeline</p><h2 class="h2" id="exp-h" data-reveal>Experience</h2></div>
+        <div><p class="sec-num"><svg class="ic"><use href="#i-bag"/></svg>The timeline</p><h2 class="h2" id="exp-h" data-reveal>Experience</h2></div>
         <p class="lede muted" data-reveal>Where I’ve worked and studied.</p>
       </div>
       <ol class="tl" id="tl">
@@ -825,7 +859,7 @@
       <canvas class="gl" id="gl-matrix" aria-hidden="true"></canvas>
       <p class="node-label" id="node-label" aria-hidden="true"></p>
       <div class="wrap matrix-ui">
-        <p class="sec-num"><svg class="ic"><use href="#i-net"/></svg>01, the matrix</p>
+        <p class="sec-num"><svg class="ic"><use href="#i-net"/></svg>The matrix</p>
         <h2 class="h2" id="work-h" data-reveal>The work</h2>
         <p class="lede" data-reveal>Everything I’ve shipped: ventures, simulators, impact platforms and media. Every node in the constellation is one project.</p>
         <p class="legend-dots" data-reveal><span style="color:var(--gold)"><i></i>Ventures</span><span style="color:var(--cyan)"><i></i>Simulations</span><span style="color:var(--green)"><i></i>Social impact</span><span style="color:var(--blue)"><i></i>Tools and media</span></p>
@@ -946,7 +980,7 @@
   <section class="block" id="lab" data-field aria-labelledby="lab-h">
     <div class="wrap">
       <div class="sec-head">
-        <div><p class="sec-num"><svg class="ic"><use href="#i-scope"/></svg>03, the lab</p><h2 class="h2" id="lab-h" data-reveal>Research and leadership</h2></div>
+        <div><p class="sec-num"><svg class="ic"><use href="#i-scope"/></svg>The lab</p><h2 class="h2" id="lab-h" data-reveal>Research and leadership</h2></div>
         <p class="lede muted" data-reveal>Neurotech, cryptography, quantum computing, and the communities I help run.</p>
       </div>
       <div class="bento">
@@ -967,16 +1001,16 @@
   <section class="block" id="teaching" data-field aria-labelledby="sh-h">
     <div class="wrap">
       <div class="sec-head">
-        <div><p class="sec-num"><svg class="ic"><use href="#i-users"/></svg>04, teaching</p><h2 class="h2" id="sh-h" data-reveal>Schoolhouse.world</h2></div>
-        <div data-reveal><p class="lede muted">A volunteer peer tutor since February 2024 and a Senior Tutor for SAT Prep, in the top 5% of tutors on every measure.</p><p style="margin-top:18px"><a class="btn ext" href="https://schoolhouse.world/portfolio/033987de-3d61-4fcc-bd30-c284d66f87c0?limitFeedback=44">Open my live Schoolhouse portfolio</a></p></div>
+        <div><p class="sec-num"><svg class="ic"><use href="#i-users"/></svg>Teaching</p><h2 class="h2" id="sh-h" data-reveal>Schoolhouse.world</h2></div>
+        <div data-reveal><p class="lede muted">A volunteer peer tutor since February 2024 and a Senior Tutor for SAT Prep, in the top 5% of tutors on every measure.</p><p style="margin-top:18px"><a class="btn ext" href="https://schoolhouse.world/portfolio/033987de-3d61-4fcc-bd30-c284d66f87c0?limitFeedback=44">Open my Schoolhouse portfolio</a></p></div>
       </div>
       <div class="sh-stats" data-stagger>
-        <div class="gauge" data-reveal style="--c:var(--cyan)"><svg viewBox="0 0 36 36" aria-hidden="true"><circle class="g-bg" cx="18" cy="18" r="15.9" pathLength="100"/><circle class="g-fg" cx="18" cy="18" r="15.9" pathLength="100"/></svg><b data-count="87">0</b><span>Tutoring hours</span><em>Top 5%</em></div>
-        <div class="gauge" data-reveal style="--c:var(--blue)"><svg viewBox="0 0 36 36" aria-hidden="true"><circle class="g-bg" cx="18" cy="18" r="15.9" pathLength="100"/><circle class="g-fg" cx="18" cy="18" r="15.9" pathLength="100"/></svg><b data-count="58">0</b><span>Sessions hosted</span><em>Top 5%</em></div>
-        <div class="gauge" data-reveal style="--c:var(--green)"><svg viewBox="0 0 36 36" aria-hidden="true"><circle class="g-bg" cx="18" cy="18" r="15.9" pathLength="100"/><circle class="g-fg" cx="18" cy="18" r="15.9" pathLength="100"/></svg><b data-count="28">0</b><span>Countries reached</span><em>Top 5%</em></div>
-        <div class="gauge" data-reveal style="--c:var(--gold)"><svg viewBox="0 0 36 36" aria-hidden="true"><circle class="g-bg" cx="18" cy="18" r="15.9" pathLength="100"/><circle class="g-fg" cx="18" cy="18" r="15.9" pathLength="100"/></svg><b data-count="86">0</b><span>Learners impacted</span><em>Top 5%</em></div>
-        <div class="gauge" data-reveal style="--c:var(--cyan)"><svg viewBox="0 0 36 36" aria-hidden="true"><circle class="g-bg" cx="18" cy="18" r="15.9" pathLength="100"/><circle class="g-fg" cx="18" cy="18" r="15.9" pathLength="100"/></svg><b data-count="185">0</b><span>Positive ratings</span><em>Top 5%</em></div>
-        <div class="gauge" data-reveal style="--c:var(--blue)"><svg viewBox="0 0 36 36" aria-hidden="true"><circle class="g-bg" cx="18" cy="18" r="15.9" pathLength="100"/><circle class="g-fg" cx="18" cy="18" r="15.9" pathLength="100"/></svg><b data-count="121">0</b><span>“Super helpful” ratings</span><em>Top 5%</em></div>
+        <div class="panel stat2" data-reveal style="--c:var(--cyan)"><b data-count="87">0</b><span>Tutoring hours</span><em class="pill"><i></i>Top 5%</em></div>
+        <div class="panel stat2" data-reveal style="--c:var(--blue)"><b data-count="58">0</b><span>Sessions hosted</span><em class="pill"><i></i>Top 5%</em></div>
+        <div class="panel stat2" data-reveal style="--c:var(--green)"><b data-count="28">0</b><span>Countries reached</span><em class="pill"><i></i>Top 5%</em></div>
+        <div class="panel stat2" data-reveal style="--c:var(--gold)"><b data-count="86">0</b><span>Learners impacted</span><em class="pill"><i></i>Top 5%</em></div>
+        <div class="panel stat2" data-reveal style="--c:var(--cyan)"><b data-count="185">0</b><span>Positive ratings</span><em class="pill"><i></i>Top 5%</em></div>
+        <div class="panel stat2" data-reveal style="--c:var(--blue)"><b data-count="121">0</b><span>“Super helpful” ratings</span><em class="pill"><i></i>Top 5%</em></div>
       </div>
       <div class="quotes" aria-label="Feedback from learners and tutors">
         <div class="qtrack"><blockquote class="q">When you don’t comprehend certain questions, he’s very patient and makes sure you 100% understand it.</blockquote><blockquote class="q">This tutor was really helpful and made sure that I understood the content. If I sounded doubtful or was not confident in my answers, the tutor stopped and broke down the concepts.</blockquote><blockquote class="q">Great information, walks through every step.</blockquote><blockquote class="q">Arnav, I think you have a great handle of the concepts of SAT reading.</blockquote><blockquote class="q">Was very patient when I made silly mistakes and explained it very well.</blockquote><blockquote class="q">It was a very fun session. Each and every question was explained very carefully. I got a good overview of dSAT.</blockquote><blockquote class="q" aria-hidden="true">When you don’t comprehend certain questions, he’s very patient and makes sure you 100% understand it.</blockquote><blockquote class="q" aria-hidden="true">This tutor was really helpful and made sure that I understood the content. If I sounded doubtful or was not confident in my answers, the tutor stopped and broke down the concepts.</blockquote><blockquote class="q" aria-hidden="true">Great information, walks through every step.</blockquote><blockquote class="q" aria-hidden="true">Arnav, I think you have a great handle of the concepts of SAT reading.</blockquote><blockquote class="q" aria-hidden="true">Was very patient when I made silly mistakes and explained it very well.</blockquote><blockquote class="q" aria-hidden="true">It was a very fun session. Each and every question was explained very carefully. I got a good overview of dSAT.</blockquote></div>
@@ -991,7 +1025,7 @@
   <!-- ================= AWARDS & SKILLS ================= -->
   <section class="block" id="awards" data-field aria-labelledby="aw-h">
     <div class="wrap">
-      <div class="sec-head"><div><p class="sec-num"><svg class="ic"><use href="#i-trophy"/></svg>05, the signal</p><h2 class="h2" id="aw-h" data-reveal>Awards and skills</h2></div></div>
+      <div class="sec-head"><div><p class="sec-num"><svg class="ic"><use href="#i-trophy"/></svg>Awards and skills</p><h2 class="h2" id="aw-h" data-reveal>Awards and skills</h2></div></div>
       <ul class="awards">
         <li data-reveal><span class="p-ic" style="--c:var(--gold)"><svg class="ic"><use href="#i-trophy"/></svg></span><b data-scramble-in>Top 3</b><p>UChicago Tech Showcase: Beacon ($4,000 prize)</p></li>
         <li data-reveal><span class="p-ic" style="--c:var(--cyan)"><svg class="ic"><use href="#i-chart"/></svg></span><b data-scramble-in>5th/50</b><p>UChicago × Brevan Howard Digital Assets Trading Competition (solo), Apr ’26</p></li>
@@ -1013,7 +1047,7 @@
   <section class="stage sports" id="sports" aria-labelledby="sp-h">
     <canvas class="gl" id="gl-cricket" aria-hidden="true"></canvas>
     <div class="wrap sports-body">
-      <p class="sec-num"><svg class="ic"><use href="#i-bat"/></svg>06, on the field</p>
+      <p class="sec-num"><svg class="ic"><use href="#i-bat"/></svg>On the field</p>
       <h2 class="h2" id="sp-h" data-reveal>Sports</h2>
       <p class="lede" data-reveal>Vice President and Treasurer of the UChicago Cricket Club, with a lot of running in between.</p>
       <ul class="sp-list" data-reveal>
@@ -1034,7 +1068,7 @@
   <section class="block" id="hobbies" data-field aria-labelledby="hb-h">
     <div class="wrap">
       <div class="sec-head">
-        <div><p class="sec-num"><svg class="ic"><use href="#i-music"/></svg>07, off duty</p><h2 class="h2" id="hb-h" data-reveal>Hobbies</h2></div>
+        <div><p class="sec-num"><svg class="ic"><use href="#i-music"/></svg>Off duty</p><h2 class="h2" id="hb-h" data-reveal>Hobbies</h2></div>
         <p class="lede muted" data-reveal>Making things, reading things, and keeping a few streaks alive.</p>
       </div>
       <div class="hob" data-stagger>
@@ -1056,7 +1090,7 @@
   <section class="block" id="fun" data-field aria-labelledby="fun-h">
     <div class="wrap">
       <div class="sec-head">
-        <div><p class="sec-num"><svg class="ic"><use href="#i-spark"/></svg>08, quick hits</p><h2 class="h2" id="fun-h" data-reveal>Fun facts</h2></div>
+        <div><p class="sec-num"><svg class="ic"><use href="#i-spark"/></svg>Quick hits</p><h2 class="h2" id="fun-h" data-reveal>Fun facts</h2></div>
         <p class="lede muted" data-reveal>Tap a card to flip it. There’s also a secret game hiding somewhere.</p>
       </div>
       <div class="facts" data-stagger>
@@ -1075,9 +1109,9 @@
   <!-- ================= CONTACT ================= -->
   <section class="block contact" id="contact" data-field aria-labelledby="contact-h">
     <div class="wrap">
-      <p class="sec-num"><svg class="ic"><use href="#i-sat"/></svg>09, connect</p>
+      <p class="sec-num"><svg class="ic"><use href="#i-sat"/></svg>Connect</p>
       <h2 class="big" id="contact-h" data-reveal>Let’s build<br>something real.</h2>
-      <p class="creed" data-reveal>Invest in people, not in ideas. I can mentor and I can be mentored. I can angel invest and I can take angel investment. I can do a lot, and I have no limits. Contact me and let’s talk.</p>
+      <p class="creed" data-reveal><span>Invest in people, not in ideas.</span><span>I can mentor and I can be mentored.</span><span>I can angel invest and I can take angel investment.</span><span>I can do a lot, and I have no limits.</span><span class="creed-end">Let’s talk.</span></p>
       <a class="mail" href="mailto:arnavrai@uchicago.edu" data-scramble>arnavrai@uchicago.edu</a>
       <p class="more">
         <a href="mailto:arnavthefirst@gmail.com"><svg class="ic"><use href="#i-mail"/></svg>arnavthefirst@gmail.com</a>
@@ -1197,6 +1231,7 @@
     if (el.hasAttribute('data-scramble-in')) scramble(el, el.textContent, 900);
     el.querySelectorAll && el.querySelectorAll('[data-scramble-in]').forEach(c => scramble(c, c.textContent, 900));
   }), { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+  $$('.h2[data-reveal]').forEach(hh => { const sp = document.createElement('span'); sp.className = 'h2-in'; sp.innerHTML = hh.innerHTML; hh.innerHTML = ''; hh.append(sp); });
   $$('[data-reveal], [data-count], .warp [data-scramble-in]').forEach(el => rio.observe(el));
 
   /* ---------- pinned sections: progress + text steps ---------- */
@@ -1223,8 +1258,10 @@
     navTargets.forEach((t, i) => { if (!t) return; const top = t.getBoundingClientRect().top; if (top < innerHeight * .4 && top > best) { best = top; cur = i; } });
     navLinks.forEach((a, i) => a.setAttribute('aria-current', i === cur ? 'true' : 'false'));
   }
-  addEventListener('scroll', onScroll, { passive: true });
-  addEventListener('resize', onScroll);
+  let scrollRaf = 0;
+  const onScrollRaf = () => { if (!scrollRaf) scrollRaf = requestAnimationFrame(() => { scrollRaf = 0; onScroll(); }); };
+  addEventListener('scroll', onScrollRaf, { passive: true });
+  addEventListener('resize', onScrollRaf);
   onScroll();
 
   /* ---------- UI loop: cursor, marquees ---------- */
@@ -1266,7 +1303,9 @@
       el.style.transition = 'transform .35s cubic-bezier(.2,.7,.1,1)';
     });
     const letters = $$('.name .ch i'), name = $('.name');
-    $('.hero').addEventListener('pointermove', e => {
+    let lraf = 0;
+    $('.hero').addEventListener('pointermove', e => { if (lraf) return; lraf = requestAnimationFrame(() => { lraf = 0; dodge(e); }); });
+    function dodge(e) {
       const nr = name.getBoundingClientRect();
       if (e.clientY < nr.top - 120 || e.clientY > nr.bottom + 120) { letters.forEach(l => l.style.transform = ''); return; }
       letters.forEach(l => {
@@ -1274,7 +1313,7 @@
         const dx = cx - e.clientX, dy = cy - e.clientY, d = Math.hypot(dx, dy), f = Math.max(0, 1 - d / 260);
         l.style.transform = f ? `translate(${dx / d * f * 14}px, ${dy / d * f * 18}px) rotate(${dx / d * f * 4}deg)` : '';
       });
-    });
+    }
     $('.hero').addEventListener('pointerleave', () => letters.forEach(l => l.style.transform = ''));
   }
 
@@ -1325,7 +1364,7 @@
   const lio = new IntersectionObserver(es => es.forEach(e => { if (e.target._live) e.target._live.on = e.isIntersecting; }), { rootMargin: '80px' });
   $$('canvas[data-live]').forEach((cv, i) => { live(cv, cv.dataset.live, i * 1.37); lio.observe(cv); });
   let liveT = 0;
-  (function liveLoop(now) { if (!reduce && now - liveT > 28) { liveT = now; const t = now / 1000; for (const o of lives) if (o.on) paintL(o, t + o.seed); } requestAnimationFrame(liveLoop); })(performance.now());
+  (function liveLoop(now) { if (!reduce && now - liveT > 48) { liveT = now; const t = now / 1000; for (const o of lives) if (o.on) paintL(o, t + o.seed); } requestAnimationFrame(liveLoop); })(performance.now());
   let rsz; addEventListener('resize', () => { clearTimeout(rsz); rsz = setTimeout(() => lives.forEach(o => { sizeL(o); paintL(o, o.seed); }), 150); });
   if (finePointer && !reduce) $$('.feat-art').forEach(el => {
     el.addEventListener('pointermove', e => { const r = el.getBoundingClientRect(), px = (e.clientX - r.left) / r.width - .5, py = (e.clientY - r.top) / r.height - .5; el.style.transform = `perspective(1000px) rotateX(${(-py * 6).toFixed(2)}deg) rotateY(${(px * 8).toFixed(2)}deg)`; });
@@ -1373,7 +1412,7 @@
   const term = $('#term'), out = $('#term-out'), inp = $('#term-in');
   const prompt = document.createElement('div'); prompt.className = 'tline'; prompt.innerHTML = '<span class="tp">guest@arnavrai:~$</span><span class="techo"></span><span class="tcaret"></span>'; out.append(prompt);
   const echo = prompt.querySelector('.techo');
-  const projects = cards.map((c, i) => ({ n: +c.dataset.n, name: c.querySelector('h3').textContent, cat: ({ ventures: 'Ventures', sims: 'Simulations', impact: 'Social Impact', tools: 'Tools & Media' })[c.dataset.cat], url: (c.querySelector('.links a') || {}).href })).sort((a, b) => a.n - b.n);
+  const projects = cards.map((c, i) => ({ n: +c.dataset.n, name: c.querySelector('h3').textContent, cat: ({ ventures: 'Ventures', sims: 'Simulations', impact: 'Social impact', tools: 'Tools and media' })[c.dataset.cat], url: (c.querySelector('.links a') || {}).href })).sort((a, b) => a.n - b.n);
   const JOKES = ['A neutron walks into a bar and asks how much for a drink. The bartender says, "For you, no charge."', 'I would tell you a UDP joke, but you might not get it.', 'Schrödinger’s cat walks into a bar. And doesn’t.', 'Why can’t you trust atoms? They make up everything.', 'A photon checks into a hotel. "Any luggage?" "No, I’m travelling light."'];
   const hist = []; let hi = 0, greeted = false;
   function print(text, cls) { const p = document.createElement('div'); if (cls) p.className = cls; p.textContent = text; out.insertBefore(p, prompt); out.scrollTop = out.scrollHeight; }
@@ -1516,28 +1555,8 @@
     requestAnimationFrame(gameLoop);
   }
 
-  /* ---------- smooth, slightly slower scrolling ---------- */
-  let sTarget = scrollY, sCur = scrollY, sOn = false;
-  const maxY = () => document.documentElement.scrollHeight - innerHeight;
-  function sStep() {
-    sCur += (sTarget - sCur) * .12;
-    if (Math.abs(sTarget - sCur) < .5) { sCur = sTarget; sOn = false; }
-    scrollTo({ top: sCur, behavior: 'instant' });
-    if (sOn) requestAnimationFrame(sStep);
-  }
-  window.__scrollTo = y => {
-    sTarget = clamp(y, 0, maxY());
-    if (reduce) { scrollTo({ top: sTarget, behavior: 'instant' }); return; }
-    if (!sOn) { sOn = true; sCur = scrollY; requestAnimationFrame(sStep); }
-  };
-  if (finePointer && !reduce) addEventListener('wheel', e => {
-    if (e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY) || e.target.closest('.term, .game')) return;
-    e.preventDefault();
-    const dy = e.deltaMode === 1 ? e.deltaY * 32 : e.deltaMode === 2 ? e.deltaY * innerHeight : e.deltaY;
-    window.__scrollTo((sOn ? sTarget : scrollY) + dy * .7);
-  }, { passive: false });
-  // Any scroll the glide didn't cause (scrollbar drag, keys, find-in-page) cancels the glide.
-  addEventListener('scroll', () => { if (!sOn || Math.abs(scrollY - sCur) > 3) { sOn = false; sTarget = sCur = scrollY; } }, { passive: true });
+  /* ---------- anchors land below the fixed bar; native smooth scrolling ---------- */
+  window.__scrollTo = y => scrollTo({ top: Math.max(0, y), behavior: reduce ? 'auto' : 'smooth' });
   document.addEventListener('click', e => {
     const a = e.target.closest('a[href^="#"]');
     if (!a || a.classList.contains('skip')) return;
@@ -1596,7 +1615,7 @@
       if (s.ready) return; s.ready = true;
       const k = initQueue.indexOf(init); if (k >= 0) initQueue.splice(k, 1);
       const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
-      renderer.setPixelRatio(Math.min(devicePixelRatio || 1, opts.maxDpr || 1.5));
+      renderer.setPixelRatio(Math.min(devicePixelRatio || 1, opts.maxDpr || 1.25));
       if (opts.transparent) renderer.setClearColor(0x000000, 0); else renderer.setClearColor(new THREE.Color(css('--stage')), 1);
       if (opts.lit) { renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = opts.exposure || 1; }
       s.renderer = renderer; s.scene = new THREE.Scene(); s.camera = new THREE.PerspectiveCamera(opts.fov || 35, 1, .1, 200);
@@ -1623,7 +1642,7 @@
       const near = new IntersectionObserver(([e]) => { if (e.isIntersecting) { near.disconnect(); init(); } }, { rootMargin: '1400px 0px' });
       near.observe(opts.observe || canvas);
     }
-    if (!opts.manual) new IntersectionObserver(([e]) => { s.visible = e.isIntersecting; if (s.visible && s.ready) kick(); }, { rootMargin: '120px' }).observe(opts.observe || canvas);
+    if (!opts.manual) new IntersectionObserver(([e]) => { s.visible = e.isIntersecting; if (s.visible && s.ready) kick(); }, { rootMargin: '0px' }).observe(opts.observe || canvas);
     return s;
   }
   // Shift the 3D focal point on screen so text and scene can share the frame.
@@ -1716,17 +1735,21 @@
     const energy = new Float32Array(NT);
     const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), pv = new THREE.Vector3(), sv = new THREE.Vector3(), zAx = new THREE.Vector3(0, 0, 1);
     const cBase = COL.cyan.clone().multiplyScalar(.075), tc = new THREE.Color();
+    const active = new Set();
+    function towerAt(i) {
+      const ip = i % NPHI, iz = (i / NPHI) | 0, phi = (ip + .5) * dphi, z = -ZMAX + (iz + .5) * dz, e = energy[i];
+      const h = .03 + Math.min(1.0, e * .22);
+      q.setFromAxisAngle(zAx, phi); pv.set(RCAL * Math.cos(phi), RCAL * Math.sin(phi), z); sv.set(h, dphi * RCAL * .64, dz * .64);
+      towers.setMatrixAt(i, m4.compose(pv, q, sv));
+      tc.copy(cBase).lerp(COL.gold, clamp(e * .55) * .85).lerp(COL.white, clamp((e - 1.6) / 3.5) * .7);
+      towers.setColorAt(i, tc);
+    }
+    // Only towers that are lit get updated each frame.
     function drawTowers(dt) {
+      if (!drawTowers.init) { drawTowers.init = true; for (let i = 0; i < NT; i++) towerAt(i); towers.instanceMatrix.needsUpdate = true; towers.instanceColor.needsUpdate = true; return; }
+      if (!active.size) return;
       const k = Math.exp(-dt / 2600);
-      for (let i = 0; i < NT; i++) {
-        energy[i] *= k;
-        const ip = i % NPHI, iz = (i / NPHI) | 0, phi = (ip + .5) * dphi, z = -ZMAX + (iz + .5) * dz, e = energy[i];
-        const h = .03 + Math.min(1.0, e * .22);
-        q.setFromAxisAngle(zAx, phi); pv.set(RCAL * Math.cos(phi), RCAL * Math.sin(phi), z); sv.set(h, dphi * RCAL * .64, dz * .64);
-        towers.setMatrixAt(i, m4.compose(pv, q, sv));
-        tc.copy(cBase).lerp(COL.gold, clamp(e * .55) * .85).lerp(COL.white, clamp((e - 1.6) / 3.5) * .7);
-        towers.setColorAt(i, tc);
-      }
+      for (const i of active) { energy[i] *= k; if (energy[i] < .003) { energy[i] = 0; active.delete(i); } towerAt(i); }
       towers.instanceMatrix.needsUpdate = true; towers.instanceColor.needsUpdate = true;
     }
     drawTowers(0);
@@ -1758,7 +1781,7 @@
         nCharged++;
         let x = 0, y = 0, z = 0, t = t0, n = 0;
         const p = Math.hypot(pt, pz), ds = .028, loss = pt < 1.15 ? .0018 : 0, c = qc > 0 ? COL.cyan : COL.green;
-        while (n++ < 700) {
+        while (n++ < 480) {
           const dT = ds * pt / p, dZ = ds * pz / p;
           phi += qc * KB / pt * dT;
           x += Math.cos(phi) * dT; y += Math.sin(phi) * dT; z += dZ; t += ds / V;
@@ -1827,10 +1850,10 @@
     function retire(ev) { det.remove(ev.pts); det.remove(ev.flash); ev.pts.geometry.dispose(); ev.mat.dispose(); ev.flash.material.dispose(); ev.cones.forEach(c => { det.remove(c); c.geometry.dispose(); c.material.dispose(); }); }
     function deposit(d) {
       const ip = Math.floor((((d.phi % TAU) + TAU) % TAU) / dphi) % NPHI, iz = clamp(Math.floor((d.z + ZMAX) / dz), 0, NZ - 1);
-      energy[iz * NPHI + ip] += d.e;
+      energy[iz * NPHI + ip] += d.e; active.add(iz * NPHI + ip);
     }
     function fire(phi) {
-      if (events.length >= 12) retire(events.shift());
+      if (events.length >= 6) retire(events.shift());
       const ev = makeEvent(phi, !reduce);
       ev.start = performance.now();
       ev.still = reduce;
@@ -1927,7 +1950,7 @@
   window.__warp = (k = 1) => { warpBoost = Math.max(warpBoost, 2.2 * k); field.visible = true; kick(); };
   const fieldEls = $$('[data-field]');
   const field = stage(document.getElementById('gl-field'), { fov: 60, manual: true, transparent: true, maxDpr: 1.5 }, s => {
-    const N = 1200, P = new Float32Array(N * 3), L = new Float32Array(N * 6);
+    const N = 700, P = new Float32Array(N * 3), L = new Float32Array(N * 6);
     const seed = i => { P[i * 3] = rand(-46, 46); P[i * 3 + 1] = rand(-28, 28); P[i * 3 + 2] = rand(-130, -2); };
     for (let i = 0; i < N; i++) seed(i);
     const pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.BufferAttribute(P, 3));
