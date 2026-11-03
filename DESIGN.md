@@ -1,4 +1,4 @@
-# arnavrai.in design system (v10)
+# arnavrai.in design system (v11)
 
 A tour of a physics lab: dark 3D stages for the big moments, lighter reading sections between them, a warp starfield behind everything, and an icon on nearly every item.
 
@@ -79,3 +79,10 @@ An inline SVG sprite at the top of `<body>` (`#i-rocket`, `#i-atom`, `#i-sat`, �
 - Schoolhouse stats are plain tiles: number, label, and a "Top 5%" pill pinned to the same baseline in every tile. The ring gauges are gone.
 - One corner radius (`--r: 20px`) for every panel, tile, card, quote and featured image.
 - Terminal category names match the page ("Social impact", "Tools and media").
+
+## v11: adaptive quality
+
+- A quality governor watches frame time. Tier 0 renders 3D at 1.5× pixel ratio with antialiasing; if frames average over 30 ms it steps to tier 1 (1×), then tier 2 (0.75×, fewer live collisions, 2D canvases at 6 fps, no cursor trail or marquee). It steps back up when frames are fast again. Phones start at tier 1.
+- Only one 3D scene renders per frame: the one filling most of the viewport. The background starfield renders at 0.75× and 30 fps; the terminal rocket renders only while the terminal is open.
+- Live 2D canvases pause while scrolling fast. Earth's noise uses four octaves.
+- New effects (all cheap): a shockwave ring and camera kick on every hero collision, a spotlight that follows the cursor across every panel and tile, a comet trail behind the cursor, and animated nav underlines.

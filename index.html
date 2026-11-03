@@ -585,6 +585,18 @@
   .stat2 span { color: var(--graphite); line-height: 1.3; }
   .stat2 .pill { margin-top: auto; align-self: flex-start; font-style: normal; }
   @media (prefers-color-scheme: light) { .stat2 b { color: var(--ink); } .stat2 .pill i { background: var(--c); } }
+
+  /* ---------- spotlight hover, cursor trail, nav underline ---------- */
+  .spot { position: relative; }
+  .spot::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .25s; z-index: 1;
+    background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent) 16%, transparent), transparent 62%); }
+  .tb.spot::before, .fact .front.spot::before { background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--cyan) 18%, transparent), transparent 62%); }
+  .spot:hover::before { opacity: 1; }
+  .trail { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 94; pointer-events: none; }
+  .bar nav a { position: relative; }
+  .bar nav a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: 6px; height: 1.5px; background: var(--cyan); transition: right .25s var(--ease); }
+  .bar nav a:hover::after, .bar nav a[aria-current="true"]::after { right: 0; }
+  html[data-tier="2"] .trail, html[data-tier="2"] .marquee .track { display: none; }
 </style>
 </head>
 <body>
@@ -1364,7 +1376,7 @@
   const lio = new IntersectionObserver(es => es.forEach(e => { if (e.target._live) e.target._live.on = e.isIntersecting; }), { rootMargin: '80px' });
   $$('canvas[data-live]').forEach((cv, i) => { live(cv, cv.dataset.live, i * 1.37); lio.observe(cv); });
   let liveT = 0;
-  (function liveLoop(now) { if (!reduce && now - liveT > 48) { liveT = now; const t = now / 1000; for (const o of lives) if (o.on) paintL(o, t + o.seed); } requestAnimationFrame(liveLoop); })(performance.now());
+  (function liveLoop(now) { const fps = [20, 12, 6][+root.dataset.tier || 0]; if (!reduce && now - liveT > 1000 / fps && Math.abs(scrollVel) < 3) { liveT = now; const t = now / 1000; for (const o of lives) if (o.on) paintL(o, t + o.seed); } requestAnimationFrame(liveLoop); })(performance.now());
   let rsz; addEventListener('resize', () => { clearTimeout(rsz); rsz = setTimeout(() => lives.forEach(o => { sizeL(o); paintL(o, o.seed); }), 150); });
   if (finePointer && !reduce) $$('.feat-art').forEach(el => {
     el.addEventListener('pointermove', e => { const r = el.getBoundingClientRect(), px = (e.clientX - r.left) / r.width - .5, py = (e.clientY - r.top) / r.height - .5; el.style.transform = `perspective(1000px) rotateX(${(-py * 6).toFixed(2)}deg) rotateY(${(px * 8).toFixed(2)}deg)`; });
@@ -1567,6 +1579,41 @@
     history.replaceState(null, '', a.getAttribute('href'));
   });
 
+  /* ---------- spotlight that follows the cursor across every panel ---------- */
+  if (finePointer) {
+    $$('.panel, .tb, .row, .feat-art, .fact .front, .gauge').forEach(el => el.classList.add('spot'));
+    document.addEventListener('pointermove', e => {
+      const el = e.target.closest('.spot'); if (!el) return;
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', `${((e.clientX - r.left) / r.width * 100).toFixed(1)}%`); el.style.setProperty('--my', `${((e.clientY - r.top) / r.height * 100).toFixed(1)}%`);
+    }, { passive: true });
+  }
+
+  /* ---------- cursor trail: a short comet of particles behind the pointer ---------- */
+  if (finePointer && !reduce) {
+    const tc = document.createElement('canvas'); tc.className = 'trail'; document.body.append(tc);
+    const tg = tc.getContext('2d'); let tw = 0, th = 0, parts = [], traf = 0, lx = 0, ly = 0;
+    const fitT = () => { tw = tc.width = innerWidth; th = tc.height = innerHeight; };
+    fitT(); addEventListener('resize', fitT);
+    const dark = () => { const el = document.elementFromPoint(lx, ly); return !!(el && el.closest('.stage, .tb, .fact, .term')); };
+    const loopT = () => {
+      tg.clearRect(0, 0, tw, th);
+      tg.globalCompositeOperation = 'lighter';
+      parts = parts.filter(p => (p.life -= .035) > 0);
+      for (const p of parts) { p.x += p.vx; p.y += p.vy; p.vx *= .92; p.vy *= .92; tg.globalAlpha = p.life * .55; tg.fillStyle = p.c; tg.beginPath(); tg.arc(p.x, p.y, p.r * p.life, 0, TAU); tg.fill(); }
+      tg.globalAlpha = 1; tg.globalCompositeOperation = 'source-over';
+      traf = parts.length ? requestAnimationFrame(loopT) : 0;
+    };
+    addEventListener('pointermove', e => {
+      const dx = e.clientX - lx, dy = e.clientY - ly, sp = Math.hypot(dx, dy); lx = e.clientX; ly = e.clientY;
+      if (sp < 2) return;
+      const n = Math.min(4, 1 + sp / 12), onDark = dark();
+      for (let i = 0; i < n; i++) parts.push({ x: lx - dx * i / n, y: ly - dy * i / n, vx: -dx * .06 + rand(-.6, .6), vy: -dy * .06 + rand(-.6, .6), r: rand(2, 4.5), life: 1, c: onDark ? (Math.random() < .5 ? '#8FD3FF' : '#5B8CFF') : (Math.random() < .5 ? '#2F5BE8' : '#1B2440') });
+      if (parts.length > 90) parts.splice(0, parts.length - 90);
+      if (!traf) traf = requestAnimationFrame(loopT);
+    }, { passive: true });
+  }
+
   /* ---------- hero icon tiles drift with the cursor ---------- */
   if (finePointer && !reduce) {
     const tiles = $$('.tile');
@@ -1589,16 +1636,34 @@
   /* ---------- scene manager: one loop, only visible scenes render ---------- */
   const scenes = [];
   let running = false, last = 0;
+  // Quality governor: measure frame time, step resolution and effects to fit the machine.
+  const Q = { tier: /Mobi|Android|iPhone|iPad/.test(navigator.userAgent) ? 1 : 0, ema: 16, frames: 0, cool: 0 };
+  const DPRS = [1.5, 1, .75];
+  function applyTier() {
+    root.dataset.tier = Q.tier; window.__tier = Q.tier;
+    for (const s of scenes) { const cap = Math.min(DPRS[Q.tier], s.opts.maxDpr || 9); s.renderer.setPixelRatio(Math.min(devicePixelRatio || 1, cap)); s.w = 0; s.fit(); }
+  }
+  root.dataset.tier = Q.tier; window.__tier = Q.tier;
   function kick() { if (!running) { running = true; last = performance.now(); requestAnimationFrame(loop); } }
   function loop(now) {
     const dt = Math.min(50, now - last); last = now;
-    let any = false;
+    Q.ema += (dt - Q.ema) * .08; Q.frames++;
+    if (Q.frames > 40 && Q.frames % 20 === 0) {
+      if (Q.ema > 30 && Q.tier < 2) { Q.tier++; applyTier(); Q.frames = 0; Q.cool = 0; }
+      else if (Q.ema < 13 && Q.tier > 0 && ++Q.cool > 8) { Q.tier--; applyTier(); Q.frames = 0; Q.cool = 0; }
+    }
+    // Only the 3D scene filling most of the viewport renders; the background field and terminal rocket are exempt.
+    let main = null, best = 0, any = false;
     for (const s of scenes) {
-      if (!s.visible) continue;
+      if (!s.visible || s.opts.manual) continue;
+      const r = (s.opts.observe || s.canvas).getBoundingClientRect(), vis = Math.max(0, Math.min(r.bottom, innerHeight) - Math.max(r.top, 0));
+      if (vis > best) { best = vis; main = s; }
+    }
+    for (const s of scenes) {
+      if (!s.visible || (!s.opts.manual && s !== main)) continue;
       any = true;
-      s.fit();
-      s.update(now, dt);
-      s.renderer.render(s.scene, s.camera);
+      if (s.opts.fps && now - (s.lastR || 0) < 1000 / s.opts.fps) continue;
+      s.lastR = now; s.fit(); s.update(now, dt); s.renderer.render(s.scene, s.camera);
     }
     if (any) requestAnimationFrame(loop); else running = false;
   }
@@ -1610,12 +1675,12 @@
   }
   function startPump() { if (!pumping && initQueue.length) { pumping = true; setTimeout(pump, 300); } }
   function stage(canvas, opts, build) {
-    const s = { canvas, visible: false, w: 0, h: 0, uScale: 1, resize: null, update: () => {}, ready: false };
+    const s = { canvas, opts, visible: false, w: 0, h: 0, uScale: 1, resize: null, update: () => {}, ready: false };
     const init = () => {
       if (s.ready) return; s.ready = true;
       const k = initQueue.indexOf(init); if (k >= 0) initQueue.splice(k, 1);
-      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
-      renderer.setPixelRatio(Math.min(devicePixelRatio || 1, opts.maxDpr || 1.25));
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: Q.tier === 0, alpha: true, powerPreference: 'high-performance' });
+      renderer.setPixelRatio(Math.min(devicePixelRatio || 1, Math.min(DPRS[Q.tier], opts.maxDpr || 9)));
       if (opts.transparent) renderer.setClearColor(0x000000, 0); else renderer.setClearColor(new THREE.Color(css('--stage')), 1);
       if (opts.lit) { renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = opts.exposure || 1; }
       s.renderer = renderer; s.scene = new THREE.Scene(); s.camera = new THREE.PerspectiveCamera(opts.fov || 35, 1, .1, 200);
@@ -1844,21 +1909,23 @@
         const m = new THREE.Mesh(new THREE.ConeGeometry(.62, RCAL * 1.05, 28, 1, true).rotateX(Math.PI).translate(0, RCAL * .525, 0), new THREE.MeshBasicMaterial({ color: COL.gold, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
         m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir); det.add(m); return m;
       });
-      return { pts, mat, flash, deps, t0, nCharged, cones };
+      const ring = new THREE.Mesh(new THREE.RingGeometry(.92, 1, 72), new THREE.MeshBasicMaterial({ color: COL.cyan, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
+      det.add(ring);
+      return { pts, mat, flash, ring, deps, t0, nCharged, cones };
     }
 
-    function retire(ev) { det.remove(ev.pts); det.remove(ev.flash); ev.pts.geometry.dispose(); ev.mat.dispose(); ev.flash.material.dispose(); ev.cones.forEach(c => { det.remove(c); c.geometry.dispose(); c.material.dispose(); }); }
+    function retire(ev) { det.remove(ev.pts); det.remove(ev.flash); ev.pts.geometry.dispose(); ev.mat.dispose(); ev.flash.material.dispose(); ev.cones.forEach(c => { det.remove(c); c.geometry.dispose(); c.material.dispose(); }); det.remove(ev.ring); ev.ring.geometry.dispose(); ev.ring.material.dispose(); }
     function deposit(d) {
       const ip = Math.floor((((d.phi % TAU) + TAU) % TAU) / dphi) % NPHI, iz = clamp(Math.floor((d.z + ZMAX) / dz), 0, NZ - 1);
       energy[iz * NPHI + ip] += d.e; active.add(iz * NPHI + ip);
     }
     function fire(phi) {
-      if (events.length >= 6) retire(events.shift());
+      if (events.length >= [6, 4, 2][window.__tier || 0]) retire(events.shift());
       const ev = makeEvent(phi, !reduce);
       ev.start = performance.now();
       ev.still = reduce;
       events.push(ev);
-      evCount++;
+      evCount++; shakeAt = performance.now();
       hudEv.textContent = String(evCount).padStart(3, '0');
       hudTr.textContent = ev.nCharged;
       if (reduce) { for (const d of ev.deps) deposit(d); ev.deps.length = 0; }
@@ -1866,7 +1933,7 @@
     }
 
     // Camera: slow orbit plus pointer parallax.
-    let az = .9, mx = 0, my = 0, cmx = 0, cmy = 0, lastAuto = 0, lastUser = 0;
+    let az = .9, mx = 0, my = 0, cmx = 0, cmy = 0, lastAuto = 0, lastUser = 0, shakeAt = -1e9;
     const el = .3;
     hero.addEventListener('pointermove', e => { const r = hero.getBoundingClientRect(); mx = (e.clientX - r.left) / r.width - .5; my = (e.clientY - r.top) / r.height - .5; });
     s.resize = (w, h) => {
@@ -1890,6 +1957,7 @@
       cmx += (mx - cmx) * .04; cmy += (my - cmy) * .04;
       const a = az + cmx * .5, e = el - cmy * .25, R = dist();
       s.camera.position.set(R * Math.cos(e) * Math.sin(a), R * Math.sin(e), R * Math.cos(e) * Math.cos(a));
+      const sk = Math.max(0, 1 - (now - shakeAt) / 240) * .14; if (sk > 0) s.camera.position.x += rand(-sk, sk), s.camera.position.y += rand(-sk, sk);
       s.camera.lookAt(0, 0, 0);
       for (let i = events.length - 1; i >= 0; i--) {
         const ev = events[i], age = now - ev.start;
@@ -1901,6 +1969,7 @@
         const fa = (age - ev.t0) / 520;
         if (fa > 0 && fa < 1) { ev.flash.material.opacity = (1 - fa) * 1.2; const sc = .4 + fa * 2.6; ev.flash.scale.set(sc, sc, 1); }
         else ev.flash.material.opacity = 0;
+        if (fa > 0 && fa < 1) { ev.ring.material.opacity = (1 - fa) * .85; ev.ring.scale.setScalar(.2 + fa * 4.2); } else ev.ring.material.opacity = 0;
         if (age > 7800) { retire(ev); events.splice(i, 1); }
       }
       drawTowers(reduce ? 0 : dt);
@@ -1949,7 +2018,7 @@
   let warpBoost = 0;
   window.__warp = (k = 1) => { warpBoost = Math.max(warpBoost, 2.2 * k); field.visible = true; kick(); };
   const fieldEls = $$('[data-field]');
-  const field = stage(document.getElementById('gl-field'), { fov: 60, manual: true, transparent: true, maxDpr: 1.5 }, s => {
+  const field = stage(document.getElementById('gl-field'), { fov: 60, manual: true, transparent: true, maxDpr: .75, fps: 30 }, s => {
     const N = 700, P = new Float32Array(N * 3), L = new Float32Array(N * 6);
     const seed = i => { P[i * 3] = rand(-46, 46); P[i * 3 + 1] = rand(-28, 28); P[i * 3 + 2] = rand(-130, -2); };
     for (let i = 0; i < N; i++) seed(i);
@@ -2577,7 +2646,7 @@
     float noise(vec3 x){ vec3 i = floor(x), f = fract(x); f = f * f * (3.0 - 2.0 * f);
       return mix(mix(mix(hash(i), hash(i + vec3(1,0,0)), f.x), mix(hash(i + vec3(0,1,0)), hash(i + vec3(1,1,0)), f.x), f.y),
                  mix(mix(hash(i + vec3(0,0,1)), hash(i + vec3(1,0,1)), f.x), mix(hash(i + vec3(0,1,1)), hash(i + vec3(1,1,1)), f.x), f.y), f.z); }
-    float fbm(vec3 p){ float a = 0.5, s = 0.0; for (int i = 0; i < 5; i++) { s += a * noise(p); p *= 2.03; a *= 0.5; } return s; }
+    float fbm(vec3 p){ float a = 0.5, s = 0.0; for (int i = 0; i < 4; i++) { s += a * noise(p); p *= 2.03; a *= 0.5; } return s; }
     void main(){
       float h = fbm(vP * 2.4 + 3.1);
       float land = smoothstep(0.5, 0.54, h);
