@@ -1,4 +1,4 @@
-# arnavrai.in design system (v11)
+# arnavrai.in design system (v12)
 
 A tour of a physics lab: dark 3D stages for the big moments, lighter reading sections between them, a warp starfield behind everything, and an icon on nearly every item.
 
@@ -86,3 +86,8 @@ An inline SVG sprite at the top of `<body>` (`#i-rocket`, `#i-atom`, `#i-sat`, �
 - Only one 3D scene renders per frame: the one filling most of the viewport. The background starfield renders at 0.75× and 30 fps; the terminal rocket renders only while the terminal is open.
 - Live 2D canvases pause while scrolling fast. Earth's noise uses four octaves.
 - New effects (all cheap): a shockwave ring and camera kick on every hero collision, a spotlight that follows the cursor across every panel and tile, a comet trail behind the cursor, and animated nav underlines.
+
+## v12
+
+- Hero: the name is stacked on two lines and sized by both width and height, `clamp(96px, min(17.5vw, 27svh), 350px)`, so it fills the left of the screen on wide monitors; the hero content area widens to 1680px.
+- Fermilab: described as the AI accelerator group in Prof. Young-Kee Kim's lab, helping optimize the accelerators; dated Nov ’26 – now.

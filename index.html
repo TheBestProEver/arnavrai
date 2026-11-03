@@ -117,24 +117,26 @@
   .stage-caption { font-size: 14px; line-height: 1.45; font-style: italic; color: var(--stage-dim); max-width: 46ch; }
 
   /* ---------- hero ---------- */
-  .hero { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding-top: 96px; overflow: hidden; isolation: isolate; }
+  .hero { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding-top: 84px; overflow: hidden; isolation: isolate; }
   .hero .gl { z-index: -2; }
   .hero::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
     background: linear-gradient(to top, var(--stage) 0%, color-mix(in srgb, var(--stage) 60%, transparent) 26%, transparent 52%),
                 linear-gradient(to right, color-mix(in srgb, var(--stage) 70%, transparent) 0%, transparent 46%); }
-  .hero-copy { max-width: 44rem; cursor: auto; text-shadow: 0 0 18px var(--stage); position: relative; z-index: 2; }
+  .hero > .wrap { max-width: 1680px; }
+  .hero-copy { max-width: none; cursor: auto; text-shadow: 0 0 18px var(--stage); position: relative; z-index: 2; }
+  .hero-copy .kicker, .hero-copy .actions { max-width: 44rem; }
   .kicker { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 600; font-size: 19px; letter-spacing: .03em; color: var(--gold); }
-  .name { font-family: var(--display); font-weight: 800; font-size: clamp(92px, 13vw, 214px); line-height: .84; letter-spacing: -.012em; margin: 10px 0 0 -.04em; }
-  .name .w { display: inline-block; overflow: hidden; vertical-align: top; padding: .02em .02em .04em 0; }
+  .name { font-family: var(--display); font-weight: 800; font-size: clamp(96px, min(17.5vw, 27svh), 350px); line-height: .8; letter-spacing: -.014em; margin: 8px 0 0 -.04em; }
+  .name .w { display: block; overflow: hidden; padding: .02em .02em .04em 0; }
   .name .ch { display: inline-block; }
   .name .ch i { display: inline-block; font-style: normal; transition: transform .5s var(--ease); }
   .js .name .ch { transform: translateY(112%); }
   .booted .name .ch { animation: rise 1.05s var(--ease) forwards; animation-delay: calc(var(--i) * 50ms); }
   @keyframes rise { to { transform: none; } }
-  .tagline { font-style: italic; font-size: clamp(30px, 3.6vw, 58px); line-height: 1.04; color: var(--stage-dim); margin-top: .12em; min-height: 1.1em; }
+  .tagline { font-style: italic; font-size: clamp(30px, 3.8vw, 64px); line-height: 1.04; color: var(--stage-dim); margin-top: .1em; min-height: 1.1em; }
   .tagline b { font-weight: 400; color: var(--blue); }
-  .hero-copy > p.intro { font-size: clamp(18px, .6vw + 14px, 22px); line-height: 1.45; max-width: 40ch; margin: var(--s4) 0 var(--s4); color: var(--stage-ink); }
-  .hero-foot { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) auto; gap: var(--s3); align-items: end; border-top: 1px solid var(--stage-rule); margin-top: var(--s5); padding-block: var(--s3) var(--s4); }
+  .hero-copy > p.intro { font-size: clamp(18px, .7vw + 14px, 24px); line-height: 1.45; max-width: 42ch; margin: var(--s3) 0 var(--s3); color: var(--stage-ink); }
+  .hero-foot { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) auto; gap: var(--s3); align-items: end; border-top: 1px solid var(--stage-rule); margin-top: var(--s4); padding-block: 20px var(--s3); }
   .stat .ic { width: 26px; height: 26px; color: var(--cyan); margin-bottom: 10px; display: block; }
   .stat b { display: block; font-family: var(--display); font-weight: 700; font-size: clamp(38px, 3.6vw, 60px); line-height: 1; font-variant-numeric: tabular-nums; }
   .stat span { display: block; margin-top: 6px; font-size: 15px; color: var(--stage-dim); }
@@ -154,7 +156,7 @@
     .hud { grid-column: 1 / -1; align-items: flex-start; }
     .tile { width: 44px; height: 44px; border-radius: 12px; } .tile .ic { width: 22px; height: 22px; }
   }
-  @media (max-width: 640px) { .name { font-size: 25vw; } }
+  @media (max-width: 640px) { .name { font-size: 27vw; } }
 
   /* ---------- marquee: dark band, outlined type, icons ---------- */
   .marquee { overflow: hidden; background: var(--stage-2); color: var(--stage-ink); border-block: 1px solid var(--stage-rule); position: relative; z-index: 2; }
@@ -800,10 +802,10 @@
       <div class="wrap pin-ui">
         <div class="steps">
           <div class="step" data-from="0" data-to=".48">
-            <p class="num"><svg class="ic"><use href="#i-atom"/></svg>Starting November 2026</p>
+            <p class="num"><svg class="ic"><use href="#i-atom"/></svg>UChicago × Fermilab, Nov ’26 – now</p>
             <h2 class="h2" id="research-h">Research</h2>
-            <p class="lede">I’m joining Professor Young-Kee Kim’s group as an undergraduate researcher, developing agentic AI workflows on digital twins of Fermilab’s FAST/IOTA and PIP-II.</p>
-            <p class="muted measure">The project is part of the Multi-Office Accelerator Team (MOAT) initiative.</p>
+            <p class="lede">I’m part of the AI accelerator group in Professor Young-Kee Kim’s lab, helping optimize Fermilab’s particle accelerators with agentic AI workflows on the FAST/IOTA and PIP-II digital twins.</p>
+            <p class="muted measure">The work is part of the Multi-Office Accelerator Team (MOAT) initiative.</p>
           </div>
           <div class="step" data-from=".48" data-to="1.01">
             <p class="num"><svg class="ic"><use href="#i-screens"/></svg>Digital twins</p>
@@ -831,7 +833,7 @@
       </div>
       <ol class="tl" id="tl">
         <span class="tl-fill" aria-hidden="true"></span><span class="tl-beam" aria-hidden="true"></span>
-        <li data-reveal><span class="node-ic" aria-hidden="true"><svg class="ic"><use href="#i-atom"/></svg></span><p class="when">Starting Nov ’26</p><h3 class="h3">UChicago × Fermilab</h3><p class="role">Undergraduate Research Assistant, AI-Enabled Accelerator Operations</p><p class="what">Developing agentic AI workflows on Fermilab’s FAST/IOTA and PIP-II digital twins with Prof. Young-Kee Kim’s group.</p></li>
+        <li data-reveal><span class="node-ic" aria-hidden="true"><svg class="ic"><use href="#i-atom"/></svg></span><p class="when">Nov ’26 – now</p><h3 class="h3">UChicago × Fermilab</h3><p class="role">Undergraduate Research Assistant, AI accelerator group</p><p class="what">Helping optimize Fermilab’s particle accelerators: developing agentic AI workflows on the FAST/IOTA and PIP-II digital twins in Prof. Young-Kee Kim’s group.</p></li>
         <li data-reveal><span class="node-ic" aria-hidden="true"><svg class="ic"><use href="#i-book"/></svg></span><p class="when">Oct ’26 – now</p><h3 class="h3">Chicago Center for Teaching and Learning</h3><p class="role">Student Consultant, AI and Learning</p><p class="what">First cohort of an AI pilot program, helping instructors build AI-integrated coursework, resources and teaching strategies.</p></li>
         <li data-reveal><span class="node-ic" aria-hidden="true"><svg class="ic"><use href="#i-spark"/></svg></span><p class="when">Jun – Sep ’26</p><h3 class="h3">SkinIO</h3><p class="role">Agentic AI and Business Development</p><p class="what">Found opportunities for agentic automation across every role and built Zoho-integrated agents for sales, email, meetings and task management: 11 task-specific and 2 large agents, presented to the CEO and the company. Built a referral and matching pipeline for Connection to Care that routes patients to in-network clinics. <a class="ext" href="https://connection-to-care-app-v1.vercel.app/">Connection to Care</a></p></li>
         <li data-reveal><span class="node-ic" aria-hidden="true"><svg class="ic"><use href="#i-chart"/></svg></span><p class="when">Apr – May ’26</p><h3 class="h3">Polsky Center for Entrepreneurship and Innovation</h3><p class="role">Data Analytics Intern</p><p class="what">Industry research and benchmarking; studied every past NVC pitch and Q&amp;A for winner traits, success rates and founder retention.</p></li>
