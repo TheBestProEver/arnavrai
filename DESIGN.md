@@ -94,7 +94,7 @@ An inline SVG sprite at the top of `<body>` (`#i-rocket`, `#i-atom`, `#i-sat`, �
 
 ## v13
 
-- Awards: newest first, every row written as "Competition, date: detail" with dates as `Mon ’YY`. Added two SpaceVision 2026 third places (BizPitch for Coldtrap, Policy Debate; $250 each, Nov ’26). Tech Showcase corrected to $4,250 non-dilutive ($1,250 + $3,000), Aug ’26, everywhere it appears (hero stat, Beacon intro, Work row, Awards).
-- Hero counters format with thousands separators (`toLocaleString`), so the hero reads $4,250.
+- Awards: newest first, every row written as "Competition, date: detail" with dates as `Mon ’YY`. Added two SpaceVision 2026 third places (BizPitch for Coldtrap, Policy Debate; $250 each, Nov ’26). Tech Showcase stays at $4,000 (Arnav’s call), dated Aug ’26.
+- Hero counters format with thousands separators (`toLocaleString`).
 - Beacon: intro notes the SpaceVision 2026 Research Symposium poster; the pinned footer links to it.
-- New page `/beacon/poster/`: standalone, same fonts and tokens, light and dark. Holds `index.html`, the original PDF (`beacon-spacevision-2026-poster.pdf`), a 3200px `poster.jpg` preview and a 1200×630 `og.jpg` for link previews. Future Beacon papers or decks can sit beside it under `/beacon/`.
+- New page `/beacon-poster` (`beacon-poster.html` in the root, no folders): standalone, same fonts and tokens, light and dark. Uses `beacon-poster.pdf`, a 3200px `beacon-poster.jpg` preview and a 1200×630 `beacon-poster-og.jpg` for link previews.

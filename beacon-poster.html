@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beacon research poster, SpaceVision 2026 · Arnav Rai</title>
+<meta name="description" content="Beacon: a low-cost SOS wearable with satellite fallback for off-grid emergency response. Research poster by Arnav Rai, presented at the SpaceVision 2026 Research Symposium.">
+<link rel="canonical" href="https://arnavrai.in/beacon-poster">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://arnavrai.in/beacon-poster">
+<meta property="og:title" content="Beacon: a low-cost SOS wearable with satellite fallback">
+<meta property="og:description" content="Research poster by Arnav Rai, SpaceVision 2026 Research Symposium.">
+<meta property="og:image" content="https://arnavrai.in/beacon-poster-og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#060A16">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --bg: #EEF0F2; --card: #F8F9FB; --ink: #1B2440; --dim: #555D6E; --rule: #C7CCD5; --accent: #2F5BE8;
+    --gold: #B9791A; --frame: #060A16;
+    --display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+    --text: "Newsreader", Georgia, "Times New Roman", serif;
+    --gutter: clamp(20px, 4vw, 56px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { color-scheme: dark; --bg: #060A16; --card: #0C1427; --ink: #E9EDF5; --dim: #97A3BC; --rule: rgba(233,237,245,.15); --accent: #7AA2FF; --gold: #FFC46B; --frame: #0C1427; }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 19px/1.55 var(--text); }
+  a { color: var(--accent); text-underline-offset: .18em; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+  .wrap { max-width: 1320px; margin: 0 auto; padding: 0 var(--gutter); }
+  nav { display: flex; justify-content: space-between; align-items: center; padding-block: 22px; font-size: 16px; }
+  nav a { color: var(--dim); text-decoration: none; }
+  nav a:hover { color: var(--ink); }
+  .mark { font: 800 22px/1 var(--display); letter-spacing: .01em; color: var(--ink); }
+  header { padding-block: clamp(24px, 6vw, 72px) clamp(24px, 4vw, 48px); display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: clamp(24px, 4vw, 64px); align-items: end; }
+  .venue { margin: 0 0 14px; color: var(--gold); font-size: 17px; }
+  h1 { margin: 0; font: 800 clamp(56px, 9vw, 132px)/.86 var(--display); letter-spacing: -.005em; }
+  h1 span { display: block; font-weight: 700; font-size: .42em; line-height: 1.02; margin-top: .35em; color: var(--dim); }
+  .side p { margin: 0 0 18px; max-width: 46ch; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px 22px; align-items: center; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 999px; background: var(--accent); color: var(--bg); font-weight: 500; text-decoration: none; }
+  .btn:hover { filter: brightness(1.08); }
+  figure { margin: 0 0 clamp(40px, 6vw, 80px); }
+  .frame { display: block; background: var(--frame); padding: clamp(6px, 1vw, 14px); border-radius: 14px; }
+  .frame img { display: block; width: 100%; height: auto; border-radius: 6px; }
+  figcaption { margin-top: 12px; color: var(--dim); font-size: 16px; }
+  dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin: 0 0 clamp(48px, 7vw, 96px); padding-top: 24px; border-top: 1px solid var(--rule); }
+  dt { font: 700 26px/1.1 var(--display); margin-bottom: 6px; }
+  dd { margin: 0; color: var(--dim); font-size: 17px; max-width: 38ch; }
+  footer { padding-block: 28px 40px; border-top: 1px solid var(--rule); color: var(--dim); font-size: 16px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  @media (max-width: 820px) { header { grid-template-columns: 1fr; } dl { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav aria-label="Site">
+    <a class="mark" href="/">Arnav Rai</a>
+    <a href="/#beacon">Back to Beacon</a>
+  </nav>
+
+  <header>
+    <div>
+      <p class="venue">Research poster, SpaceVision 2026 Research Symposium, SEDS USA, Nov ’26</p>
+      <h1>Beacon<span>A low-cost SOS wearable with satellite fallback for off&#8209;grid emergency response</span></h1>
+    </div>
+    <div class="side">
+      <p>Nearly every personal safety tool assumes a working phone in your hand. Beacon is a one-button wearable with its own cellular link, GPS and a planned satellite fallback over 3GPP Release-17 NB-NTN. The poster tests whether that can be built from commercial cellular-IoT hardware and still sell for $50 to $100.</p>
+      <div class="actions">
+        <a class="btn" href="beacon-poster.pdf" download>Download the PDF</a>
+        <a href="beacon-poster.pdf">Open full size</a>
+        <a href="https://beaconsos.com">beaconsos.com</a>
+      </div>
+    </div>
+  </header>
+
+  <figure>
+    <a class="frame" href="beacon-poster.pdf" aria-label="Open the full-size poster PDF">
+      <img src="beacon-poster.jpg" width="3200" height="2400" alt="Beacon research poster: abstract, device design and pricing tiers, system design and alert flow, results, satellite fallback architecture, user research, progress and future work, and references.">
+    </a>
+    <figcaption>48 × 36 in poster. Open the PDF to zoom into figures and references.</figcaption>
+  </figure>
+
+  <dl>
+    <div><dt>Standalone</dt><dd>One press reaches contacts over the device’s own LTE-M link. Modem verified on the nRF9160 dev kit; end-to-end alert in progress.</dd></div>
+    <div><dt>Satellite</dt><dd>The same short SOS goes directly to a satellite where there’s no cell coverage, using the nRF9151. Untested so far.</dd></div>
+    <div><dt>Cost</dt><dd>Hardware plus five years of connectivity at a $50 to $100 one-time price. Base cellular hardware estimated at $24 to $43 per unit.</dd></div>
+  </dl>
+</div>
+<footer class="wrap">
+  <span>Arnav Rai, Physics and Astrophysics, University of Chicago</span>
+  <a href="/">arnavrai.in</a>
+</footer>
+</body>
+</html>
