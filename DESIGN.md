@@ -1,4 +1,4 @@
-# arnavrai.in design system (v12)
+# arnavrai.in design system (v13)
 
 A tour of a physics lab: dark 3D stages for the big moments, lighter reading sections between them, a warp starfield behind everything, and an icon on nearly every item.
 
@@ -91,3 +91,10 @@ An inline SVG sprite at the top of `<body>` (`#i-rocket`, `#i-atom`, `#i-sat`, �
 
 - Hero: the name is stacked on two lines and sized by both width and height, `clamp(96px, min(17.5vw, 27svh), 350px)`, so it fills the left of the screen on wide monitors; the hero content area widens to 1680px.
 - Fermilab: described as the AI accelerator group in Prof. Young-Kee Kim's lab, helping optimize the accelerators; dated Nov ’26 – now.
+
+## v13
+
+- Awards: newest first, every row written as "Competition, date: detail" with dates as `Mon ’YY`. Added two SpaceVision 2026 third places (BizPitch for Coldtrap, Policy Debate; $250 each, Nov ’26). Tech Showcase corrected to $4,250 non-dilutive ($1,250 + $3,000), Aug ’26, everywhere it appears (hero stat, Beacon intro, Work row, Awards).
+- Hero counters format with thousands separators (`toLocaleString`), so the hero reads $4,250.
+- Beacon: intro notes the SpaceVision 2026 Research Symposium poster; the pinned footer links to it.
+- New page `/beacon/poster/`: standalone, same fonts and tokens, light and dark. Holds `index.html`, the original PDF (`beacon-spacevision-2026-poster.pdf`), a 3200px `poster.jpg` preview and a 1200×630 `og.jpg` for link previews. Future Beacon papers or decks can sit beside it under `/beacon/`.
